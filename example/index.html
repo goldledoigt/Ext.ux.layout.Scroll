@@ -1,0 +1,90 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    	<link rel="stylesheet" type="text/css" href="/lib/ext/resources/css/ext-all.css"/>
+    	<!-- <link rel="stylesheet" type="text/css" href="static/css/style.css"/> -->
+
+		<!-- ExtJS -->
+    	<script type="text/javascript" src="/lib/ext/adapter/ext/ext-base-debug.js"></script>
+    	<script type="text/javascript" src="/lib/ext/ext-all-debug.js"></script>
+		<script type="text/javascript" src="../src/Ext.ux.layout.Scroll.js"></script>
+		<script type="text/javascript" src="chart.js"></script>
+		<script type="text/javascript" src="form.js"></script>
+		<script type="text/javascript" src="grid.js"></script>
+
+		<script>
+			Ext.onReady(function() {
+
+				var panel;
+
+				var btn1 = new Ext.Button({
+					text:"up"
+					,width:50
+					,handler:function() {
+						panel.getLayout().selectPreviousItem();
+					}
+				});
+
+				var btn2 = new Ext.Button({
+					text:"down"
+					,width:50
+					,handler:function() {
+						panel.getLayout().selectNextItem();
+					}
+				});
+
+				var btn3 = new Ext.Button({
+					text:"top"
+					,width:50
+					,handler:function() {
+						panel.getLayout().setActiveItem(0);
+					}
+				});
+
+				var btn4 = new Ext.Button({
+					text:"bottom"
+					,width:50
+					,handler:function() {
+						panel.getLayout().setActiveItem(2);
+					}
+				});
+
+				var btn5 = new Ext.Button({
+					text:"doLayout"
+					,width:50
+					,handler:function() {
+						panel.doLayout();
+					}
+				});
+
+				panel = new Ext.Panel({
+					title:"panel"
+					,layout:"scroll"
+					,autoScroll:true
+					,activeItem:1
+					,border:false
+					,items:[form, grid, chart]
+					,tbar:[btn1, "-", btn2, "-", btn3, "-", btn4, "->", btn5]
+				});
+
+				var tabpanel = new Ext.TabPanel({
+					activeItem:0
+					,border:false
+					,items:[panel, {title:"panel2", html:"pof"}]
+				});
+
+				new Ext.Window({
+					width:600
+					,height:300
+					,layout:"fit"
+					,items:tabpanel
+				}).show(document.body);
+
+			});
+		</script>
+
+	</head>
+	
+	<body></body>
+</html>
