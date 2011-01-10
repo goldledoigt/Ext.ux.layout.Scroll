@@ -115,7 +115,6 @@
                 xtype: 'actioncolumn',
                 width: 50,
                 items: [{
-                    icon   : '../shared/icons/fam/delete.gif',  // Use a URL in the icon config
                     tooltip: 'Sell stock',
                     handler: function(grid, rowIndex, colIndex) {
                         var rec = store.getAt(rowIndex);
