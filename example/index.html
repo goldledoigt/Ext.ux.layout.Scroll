@@ -62,7 +62,7 @@
 				});
 
 				vpanel = new Ext.Panel({
-					title:"panel"
+					title:"VScroll Panel"
 					,layout:"vscroll"
 					,activeItem:1
 					,border:false
@@ -115,7 +115,7 @@
 				});
 
 				hpanel = new Ext.Panel({
-					title:"panel"
+					title:"HScroll Panel"
 					,layout:"hscroll"
 					,activeItem:1
 					,border:false
@@ -126,7 +126,7 @@
 				var tabpanel = new Ext.TabPanel({
 					activeItem:0
 					,border:false
-					,items:[vpanel, hpanel, {title:"panel2", html:"pof"}]
+					,items:[vpanel, hpanel]
 				});
 
 				new Ext.Window({
