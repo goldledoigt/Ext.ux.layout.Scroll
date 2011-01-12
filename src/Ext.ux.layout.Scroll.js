@@ -54,13 +54,16 @@ Ext.override(Ext.Element, {
     }
 });
 
-Ext.ux.layout.Scroll = Ext.extend(Ext.layout.ContainerLayout, {
+/***** VERTICAL SCROLL
+********************************************************************************/
 
-	type:"scroll"
+Ext.ux.layout.VScroll = Ext.extend(Ext.layout.ContainerLayout, {
+
+	type:"vscroll"
 
 	,deferredRender:true
 
-	,renderHidden:true
+	// ,renderHidden:true
 
 	,monitorResize:true
 
@@ -71,12 +74,12 @@ Ext.ux.layout.Scroll = Ext.extend(Ext.layout.ContainerLayout, {
 		itemIndex = ct.items.indexOf(item);
 		if (item && ai != item) {
 			if (ai) {
-				ai.hide();
+				// ai.hide();
 			}
 			var layout = item.doLayout && (this.layoutOnCardChange || !item.rendered);
 			this.activeItem = item;
 			delete item.deferLayout;
-			item.show();
+			// item.show();
 			this.layout();
 			if (layout) {
 				item.doLayout();
@@ -84,20 +87,24 @@ Ext.ux.layout.Scroll = Ext.extend(Ext.layout.ContainerLayout, {
 		}
 	}
 
-	,onLayout : function(ct, target) {
-		Ext.ux.layout.Scroll.superclass.onLayout.call(this, ct, target);
+	,onLayout:function(ct, target) {
+		Ext.ux.layout.VScroll.superclass.onLayout.call(this, ct, target);
 		if (!ct.collapsed) {
-			var size = this.getLayoutTargetSize();
-			size.width -= this.getScrollbarWidth(ct);
+			var size = this.getLayoutSize();
 			this.setItemSize(this.activeItem || ct.items.itemAt(0), size);
 		}
+	}
+
+	,getLayoutSize:function() {
+		var size = this.getLayoutTargetSize();
+		size.width -= this.getScrollbarWidth();
+		return size;
 	}
 
 	,renderAll:function(ct, target) {
 		var child,
 		l = ct.items.items.length,
-		size = this.getLayoutTargetSize();
-		size.width -= this.getScrollbarWidth(ct);
+		size = this.getLayoutSize();
 		if (!this.innerCt) {
 			this.innerCt = target.createChild();
 			for (var i = 0; i < l; i++) {
@@ -108,23 +115,21 @@ Ext.ux.layout.Scroll = Ext.extend(Ext.layout.ContainerLayout, {
 			child = Ext.fly(this.innerCt.dom.childNodes[i]);
 			child.setSize(size);
 		}
-		console.log("SIZE", size);
 		if (this.deferredRender) {
 			var innerTarget = this.getItemTarget(this.activeItem);
 			innerTarget.animatedScrollIntoView(target, false, true);
 			this.renderItem(this.activeItem, undefined, innerTarget);
 		} else {
-			Ext.ux.layout.Scroll.superclass.renderAll.call(this, ct, target);
+			Ext.ux.layout.VScroll.superclass.renderAll.call(this, ct, target);
 		}
 	}
 
 	,getItemTarget:function(item) {
 		var index = this.container.items.indexOf(item);
 		return Ext.get(this.innerCt.dom.childNodes[index]);
-		// return this.innerCt.child("div:nth-child("+index+")");
 	}
 
-	,getLayoutTargetSize : function() {
+	,getLayoutTargetSize:function() {
 		var target = this.container.getLayoutTarget();
 		if (!target) {
 			return {};
@@ -132,12 +137,13 @@ Ext.ux.layout.Scroll = Ext.extend(Ext.layout.ContainerLayout, {
 		return target.getStyleSize();
 	}
 
-	,getScrollbarWidth:function(ct) {
-		var l = ct.items.items.length;
-		return (l > 1 && ct.autoScroll ? 15 : 0)
+	,getScrollbarWidth:function() {
+		var ct = this.container,
+		l = ct.items.items.length;
+		return (l > 1 && ct.autoScroll ? 15 : 0);
 	}
 
-	,setItemSize : function(item, size) {
+	,setItemSize:function(item, size) {
 		if (item && size.height > 0) {
 			item.setSize(size);
 		}
@@ -160,4 +166,48 @@ Ext.ux.layout.Scroll = Ext.extend(Ext.layout.ContainerLayout, {
 
 });
 
-Ext.Container.LAYOUTS['scroll'] = Ext.ux.layout.Scroll;
+Ext.Container.LAYOUTS['vscroll'] = Ext.ux.layout.VScroll;
+
+
+/***** HORIZONTAL SCROLL
+********************************************************************************/
+
+Ext.ux.layout.HScroll = Ext.extend(Ext.ux.layout.VScroll, {
+
+	type:"hscroll"
+
+	,renderAll:function(ct, target) {
+		var child, totalWidth = 0,
+		l = ct.items.items.length,
+		size = this.getLayoutSize();
+		if (!this.innerCt) {
+			this.innerCt = target.createChild();
+			for (var i = 0; i < l; i++) {
+				this.innerCt.createChild();
+			}
+		}
+		for (var i = 0; i < l; i++) {
+			child = Ext.fly(this.innerCt.dom.childNodes[i]);
+			child.setSize(size);
+			totalWidth += size.width;
+			child.setStyle({"float":"left"});
+		}
+		this.innerCt.setWidth(totalWidth);
+		if (this.deferredRender) {
+			var innerTarget = this.getItemTarget(this.activeItem);
+			innerTarget.animatedScrollIntoView(target, true, true);
+			this.renderItem(this.activeItem, undefined, innerTarget);
+		} else {
+			Ext.ux.layout.HScroll.superclass.renderAll.call(this, ct, target);
+		}
+	}
+
+	,getLayoutSize:function() {
+		var size = this.getLayoutTargetSize();
+		size.height -= this.getScrollbarWidth();
+		return size;
+	}
+
+});
+
+Ext.Container.LAYOUTS['hscroll'] = Ext.ux.layout.HScroll;

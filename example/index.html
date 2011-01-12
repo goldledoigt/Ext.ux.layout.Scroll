@@ -15,13 +15,17 @@
 		<script>
 			Ext.onReady(function() {
 
-				var panel;
+				var vpanel, hpanel;
+
+
+				/***** VERTICAL SCROLL
+				********************************************************************************/
 
 				var btn1 = new Ext.Button({
 					text:"up"
 					,width:50
 					,handler:function() {
-						panel.getLayout().selectPreviousItem();
+						vpanel.getLayout().selectPreviousItem();
 					}
 				});
 
@@ -29,7 +33,7 @@
 					text:"down"
 					,width:50
 					,handler:function() {
-						panel.getLayout().selectNextItem();
+						vpanel.getLayout().selectNextItem();
 					}
 				});
 
@@ -37,7 +41,7 @@
 					text:"top"
 					,width:50
 					,handler:function() {
-						panel.getLayout().setActiveItem(0);
+						vpanel.getLayout().setActiveItem(0);
 					}
 				});
 
@@ -45,7 +49,7 @@
 					text:"bottom"
 					,width:50
 					,handler:function() {
-						panel.getLayout().setActiveItem(2);
+						vpanel.getLayout().setActiveItem(2);
 					}
 				});
 
@@ -53,24 +57,76 @@
 					text:"doLayout"
 					,width:50
 					,handler:function() {
-						panel.doLayout();
+						vpanel.doLayout();
 					}
 				});
 
-				panel = new Ext.Panel({
+				vpanel = new Ext.Panel({
 					title:"panel"
-					,layout:"scroll"
-					,autoScroll:true
+					,layout:"vscroll"
 					,activeItem:1
 					,border:false
 					,items:[form, grid, chart]
 					,tbar:[btn1, "-", btn2, "-", btn3, "-", btn4, "->", btn5]
 				});
 
+
+				/***** HORIZNTAL SCROLL
+				********************************************************************************/
+
+				var btn6 = new Ext.Button({
+					text:"previous"
+					,width:50
+					,handler:function() {
+						hpanel.getLayout().selectPreviousItem();
+					}
+				});
+
+				var btn7 = new Ext.Button({
+					text:"next"
+					,width:50
+					,handler:function() {
+						hpanel.getLayout().selectNextItem();
+					}
+				});
+
+				var btn8 = new Ext.Button({
+					text:"left"
+					,width:50
+					,handler:function() {
+						hpanel.getLayout().setActiveItem(0);
+					}
+				});
+
+				var btn9 = new Ext.Button({
+					text:"right"
+					,width:50
+					,handler:function() {
+						hpanel.getLayout().setActiveItem(2);
+					}
+				});
+
+				var btn10 = new Ext.Button({
+					text:"doLayout"
+					,width:50
+					,handler:function() {
+						hpanel.doLayout();
+					}
+				});
+
+				hpanel = new Ext.Panel({
+					title:"panel"
+					,layout:"hscroll"
+					,activeItem:1
+					,border:false
+					,items:[form2, grid2, chart2]
+					,tbar:[btn6, "-", btn7, "-", btn8, "-", btn9, "->", btn10]
+				});
+
 				var tabpanel = new Ext.TabPanel({
 					activeItem:0
 					,border:false
-					,items:[panel, {title:"panel2", html:"pof"}]
+					,items:[vpanel, hpanel, {title:"panel2", html:"pof"}]
 				});
 
 				new Ext.Window({

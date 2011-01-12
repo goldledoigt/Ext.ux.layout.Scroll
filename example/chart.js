@@ -23,3 +23,15 @@ var chart = new Ext.Panel({
         yField: 'visits'
     }
 });
+
+// extra extra simple
+var chart2 = new Ext.Panel({
+    layout:'fit',
+	border:false,
+    items: {
+        xtype: 'linechart',
+        store: chartstore,
+        xField: 'name',
+        yField: 'visits'
+    }
+});
